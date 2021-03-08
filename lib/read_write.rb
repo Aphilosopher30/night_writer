@@ -69,7 +69,6 @@ class ReadWrite
     text2.split("")
   end
 
-
   def replace_new_line(words)
     new_words = ""
     words.each_char do |char|
@@ -93,23 +92,24 @@ class ReadWrite
     trnaslation
   end
 
-
   def designate_line_brakes(text, max_line_length=40)
     lines =[]
     last = 0
     start = 0
     while start < text.length
       last = max_line_length
-      until text[last] == " " || text[last] == ["..","..",".."]
+      final_index = start+last
+      until text[final_index] == " " || text[final_index] == ["..","..",".."] || text[final_index] == nil
         last -=1
-        #require 'pry';  binding.pry
+        final_index = start+last
+    #    require 'pry';  binding.pry
       end
       lines << text.slice(start, last)
-      start += last + 1
-      last += max_line_length
-#    require 'pry';  binding.pry
+      start += last
+  #  require 'pry';  binding.pry
     end
     lines
+
   end
 
 
