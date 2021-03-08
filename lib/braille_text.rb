@@ -1,27 +1,15 @@
-require './lib/character'
+require'./lib/line_alpha'
+require 'pry'
 
-class ReadWrite
-  attr_reader :file
+class BrailleText
+  attr_reader :character_list
 
-  def initialize(file)
-    @file = File.open("./texts/alpha/#{file}", "r").read
-    @skipable = ";(){}[!@$%^&*]"
+  def initialize(input)
+    @character_list = process_text(input)
   end
 
-  def is_brail?
-    brail = true
-    @file.each_char do |char|
-      if char == "." || char == "0" || char == "\n"
-        brail = brail
-      else
-        brail = false
-      end
-    end
-    brail
-  end
-
-  def process_text_brail
-    lines = @file.split("\n")
+  def generate_lines_by_threes(text)
+    lines = text.split("\n")
     lines_by_threes = []
     triplet = []
     lines.each do |line|
@@ -31,25 +19,27 @@ class ReadWrite
         triplet = []
       end
     end
+    lines_by_threes
+  end
 
+
+  def generate_all_pairs(lines_by_threes)
     all_pairs = []
     lines_by_threes.each do |triplet|
       pair_array = []
       triplet.each do |row|
         row.chars.each_slice(2) do |pair|
-            xxx = pair.join
-            pair_array << xxx
+            part = pair.join
+            pair_array << part
         end
       all_pairs << pair_array
       pair_array = []
       end
     end
+    all_pairs
+  end
 
-    all_pairs_by_threes = []
-    all_pairs.each_slice(3) do |triple_pairs|
-      all_pairs_by_threes << triple_pairs
-    end
-
+  def create_brail_characters(all_pairs_by_threes)
     brail_array = []
     all_pairs_by_threes.each do |line|
       line[0].length.times do |index_number|
@@ -63,29 +53,21 @@ class ReadWrite
     brail_array
   end
 
-  def process_text_alpha
-    text = remove_unreadable
-    text2 = replace_new_line(text)
-    text2.split("")
-  end
+  def process_text(input)
+    lines_by_threes = generate_lines_by_threes(input)
+    all_pairs = generate_all_pairs(lines_by_threes)
 
-  def replace_new_line(words)
-    new_words = ""
-    words.each_char do |char|
-      if char == "\n"
-        char = " "
-      end
-      new_words += char
+    all_pairs_by_threes = []
+    all_pairs.each_slice(3) do |triple_pairs|
+      all_pairs_by_threes << triple_pairs
     end
-    new_words
+
+    create_brail_characters(all_pairs_by_threes)
   end
 
-  def remove_unreadable
-    @file.downcase.delete(@skipable)
-  end
-
-  def translate_line(text_list)
-    trnaslation = text_list.map do |element|
+###################
+  def translate_text
+    trnaslation = character_list.map do |element|
       letter = Character.new(element)
       letter.translate
     end
@@ -108,4 +90,16 @@ class ReadWrite
     end
     lines
   end
+
+  def printable_translation
+    printable = []
+    translated = translate_text
+    breaks = designate_line_brakes(translated)
+    breaks.each do |line|
+      line = LineAlpha.new(line)
+      printable << line.gerate_printable_line
+    end
+    printable.join
+  end
+
 end
