@@ -1,3 +1,5 @@
+require './lib/character'
+
 class ReadWrite
   attr_reader :file
 
@@ -64,6 +66,7 @@ class ReadWrite
   def process_text_alpha
     text = remove_unreadable
     text2 = replace_new_line(text)
+    text2.split("")
   end
 
 
@@ -82,7 +85,32 @@ class ReadWrite
     @file.downcase.delete(@skipable)
   end
 
+  def translate_line(text_list)
+    trnaslation = text_list.map do |element|
+      letter = Character.new(element)
+      letter.translate
+    end
+    trnaslation
+  end
 
+
+  def designate_line_brakes(text, max_line_length=40)
+    lines =[]
+    last = 0
+    start = 0
+    while start < text.length
+      last = max_line_length
+      until text[last] == " " || text[last] == ["..","..",".."]
+        last -=1
+        #require 'pry';  binding.pry
+      end
+      lines << text.slice(start, last)
+      start += last + 1
+      last += max_line_length
+#    require 'pry';  binding.pry
+    end
+    lines
+  end
 
 
 end

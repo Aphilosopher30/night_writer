@@ -54,7 +54,28 @@ class ReadWriteTest < MiniTest::Test
   def test_process_text_alpha
     doc = ReadWrite.new("test.txt")
 
-    assert_equal "andrews test doc used for testing ", doc.process_text_alpha
+    assert_equal ["a","n","d","r","e","w","s"," ","t","e","s","t"," ","d", "o","c"," ","u","s","e","d"," ","f","o","r"," ","t","e","s","t","i","n","g", " "] , doc.process_text_alpha
   end
+
+  def test_translate_line
+    doc = ReadWrite.new("test.txt")
+
+    translate1 = ["a","b","c","d","e"]
+    translate2 =[["0.", "..", ".."],["0.", "0.", ".."], ["00", "..", ".."], ["00", ".0", ".."], ["0.", ".0", ".."]]
+
+    assert_equal translate1, doc.translate_line(translate2)
+    assert_equal translate2, doc.translate_line(translate1)
+  end
+
+  def test_designate_line_brakes
+    doc = ReadWrite.new("john.txt")
+
+    text = doc.process_text_alpha
+    text2= "asdf asdf hgv mjuhgv mjhgv mhgv nhgvc dftyhjn knk as gjdhg kjdsh gkjda hfglk ag hkafjgh kjadhfgku hs.d,ghjk,fxckj gdflg dafsdj kfahgfh asasdfasdfasdfasf"
+
+    assert_equal "", doc.designate_line_brakes(text)
+  end
+
+
 
 end
