@@ -1,4 +1,5 @@
-require 'pry'
+require'./lib/line_brail'
+require'./lib/character'
 
 class AlphaText
   attr_reader :character_list
@@ -6,7 +7,6 @@ class AlphaText
   def initialize(input)
     @skipable = ";(){}[!@$%^&*]"
     @character_list = process_text(input)
-
   end
 
 
@@ -31,15 +31,12 @@ class AlphaText
     input.downcase.delete(@skipable)
   end
 
-
-
-###################
   def translate_text(text_list)
-    trnaslation = text_list.map do |element|
+    translation = text_list.map do |element|
       letter = Character.new(element)
       letter.translate
     end
-    trnaslation
+    translation
   end
 
   def designate_line_brakes(text, max_line_length=40)
@@ -54,7 +51,7 @@ class AlphaText
         final_index = start+last
       end
       lines << text.slice(start, last)
-      start += last
+      start += last +1
     end
     lines
   end
@@ -65,7 +62,7 @@ class AlphaText
     breaks = designate_line_brakes(translated)
     breaks.each do |line|
       line = LineBrail.new(line)
-      printable << line.gerate_printable_line
+      printable << line.generate_printable_line
     end
     printable.join
   end

@@ -26,5 +26,4 @@ class LineBrailTest < MiniTest::Test
 
     assert_equal stuff, line.generate_printable_line
   end
-
 end

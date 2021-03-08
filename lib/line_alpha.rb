@@ -8,7 +8,4 @@ class LineAlpha
   def generate_printable_line
     @line_array.join + "\n"
   end
-
-  
-
 end

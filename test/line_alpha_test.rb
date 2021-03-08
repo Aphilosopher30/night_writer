@@ -21,5 +21,4 @@ class LineAlphaTest < MiniTest::Test
 
     assert_equal "abc\n", line.generate_printable_line
   end
-
 end

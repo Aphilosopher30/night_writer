@@ -1,31 +1,21 @@
-require './lib/line_alpha'
-require './lib/line_brail'
+require './lib/braille_text'
+require './lib/alpha_text'
 require './lib/read_write'
 
 input = ARGV[0]
 output = ARGV[1]
 
-text = ReadWrite.new(input)
+raw_text = ReadWrite.new(input)
 
-if text.is_brail?
-  process = text.process_text_brail
-  object = LineAlpha
+if raw_text.is_brail?
+  text = BrailleText.new(raw_text.file)
 else
-  process = text.process_text_alpha
-  object = LineBrail
+  text = AlphaText.new(raw_text.file)
 end
 
-all_text = text.translate_line(process)
+translation = text.printable_translation
 
-breaks = text.designate_line_brakes(all_text)
+translated_doc = File.new("./texts/alpha/#{output}", "w")
+translated_doc.write(translation)
 
-printable = []
-for line in breaks
-  line = object.new(line)
-  printable << line.generate_printable_line
-end
-x = printable.join
-
-
-braile = File.new("./texts/braile/#{output}", "w")
-braile.write(x)
+puts "Created '#{output}' containing #{text.character_list.length} characters."

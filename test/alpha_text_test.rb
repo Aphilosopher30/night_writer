@@ -27,4 +27,29 @@ class AlphaTextTest < MiniTest::Test
 
     assert_equal "a b c", doc.replace_new_line("a\nb\nc")
   end
+
+  def test_tralslate_text
+    doc = AlphaText.new("a")
+
+    assert_equal [["0.","..",".."]], doc.translate_text(["a"])
+  end
+
+  def test_designate_line_brakes
+    doc = AlphaText.new("")
+
+    text = "aaaaa bbb ccc"
+
+    assert_equal ["aaaaa bbb", "ccc"], doc.designate_line_brakes(text, 10)
+  end
+
+  def test_printable_translation
+    doc = AlphaText.new("abcd")
+    doc.printable_translation
+
+    test = "0.0.0000\n..0....0\n........\n"
+
+    assert_equal test, doc.printable_translation
+
+  end
+
 end

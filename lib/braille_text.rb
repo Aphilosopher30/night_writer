@@ -49,7 +49,9 @@ class BrailleText
         brail_character << line[2][index_number]
         brail_array << brail_character
       end
+      brail_array << ["..", "..", ".."]
     end
+    brail_array.delete_at(-1)
     brail_array
   end
 
@@ -65,9 +67,8 @@ class BrailleText
     create_brail_characters(all_pairs_by_threes)
   end
 
-###################
-  def translate_text
-    trnaslation = character_list.map do |element|
+  def translate_text(text)
+    trnaslation = text.map do |element|
       letter = Character.new(element)
       letter.translate
     end
@@ -86,20 +87,20 @@ class BrailleText
         final_index = start+last
       end
       lines << text.slice(start, last)
-      start += last
+      start += last +1
     end
     lines
   end
 
   def printable_translation
     printable = []
-    translated = translate_text
+    translated = translate_text(@character_list)
     breaks = designate_line_brakes(translated)
     breaks.each do |line|
       line = LineAlpha.new(line)
-      printable << line.gerate_printable_line
+      printable << line.generate_printable_line
     end
+    printable[-1].delete_suffix(" ")
     printable.join
   end
-
 end

@@ -15,9 +15,4 @@ class LineBrail
     end
     braile
   end
-
-
-
-
-
 end
