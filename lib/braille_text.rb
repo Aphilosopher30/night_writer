@@ -100,7 +100,7 @@ class BrailleText
       line = LineAlpha.new(line)
       printable << line.generate_printable_line
     end
-    printable[-1].delete_suffix(" ")
+    printable[-1].delete_suffix("\n")
     printable.join
   end
 end
