@@ -15,7 +15,7 @@ end
 
 translation = text.printable_translation
 
-translated_doc = File.new("./texts/alpha/#{output}", "w")
+translated_doc = File.new("./texts/#{output}", "w")
 translated_doc.write(translation)
 
 puts "Created '#{output}' containing #{text.character_list.length} characters."
